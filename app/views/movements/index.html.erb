@@ -1,0 +1,38 @@
+<h1>Listing movements</h1>
+ 
+<table class="table table-hover table-responsive">
+  <tr>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Type</th>
+    <th>Amount</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+ 
+  <% @movements.each do |movement| %>
+    <tr>
+      <td><%= movement.name %></td>
+      <td><%= movement.category %></td>
+      <td>
+        <%= if movement.movementType
+              "Dépense"
+            else
+              "Rentrée"
+            end  %>
+      </td>
+      <td><%= if movement.movementType
+              "-"
+            else
+              "+"
+            end  %> <%= movement.amount %> €</td>
+      <td><%= link_to 'Show', movement_path(movement) %></td>
+      <td><%= link_to 'Edit', edit_movement_path(movement) %></td>
+      <td><%= link_to 'Destroy', movement_path(movement),
+                    method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= link_to 'New movement', new_movement_path, class: "btn btn-primary " %> 

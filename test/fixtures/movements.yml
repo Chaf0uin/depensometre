@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  category: MyString
+  amount: 9.99
+  movementType: false
+  date: 2014-11-15 16:46:46
+
+two:
+  name: MyString
+  category: MyString
+  amount: 9.99
+  movementType: false
+  date: 2014-11-15 16:46:46

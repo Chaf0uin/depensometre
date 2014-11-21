@@ -1,0 +1,67 @@
+
+<%= form_for :movement, :html => {:class => "form-horizontal"} , url: movements_path do |f| %>
+
+<fieldset>
+  <legend>New movement</legend>
+
+  <% if @movement.errors.any? %>
+    <div id="error_explanation">
+      <h3><%= pluralize(@movement.errors.count, "error") %> prohibited this movement from being saved:</h3>
+      <ul>
+        <% @movement.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :name, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-10">
+      <%= f.text_field :name, :class => "form-control" %>
+    </div>  
+  </div> 
+
+  <div class="form-group">
+    <%= f.label :category, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-10">
+      <%= f.text_field :category, :class => "form-control" %>
+    </div>  
+  </div> 
+
+  <div class="form-group">
+    <%= f.label :amount, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-10"> 
+      <%= f.number_field :amount, :class => "form-control text_field", :step => 'any' %>
+    </div>  
+  </div> 
+
+  <div class="form-group">
+    <%= f.label :type, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-10"> 
+      <div class="radio">
+        <label>
+          <%= f.radio_button :movementType, "output" %>Dépense
+        </label>
+      </div>
+      <div class="radio"> 
+        <label> 
+          <%= f.radio_button :movementType, "input" %>Rentrée
+        </label>
+      </div>  
+    </div>  
+  </div> 
+
+  <div class="form-group">
+    <%= f.label :date, :class => "col-lg-2 control-label" %>
+    <div class="col-lg-10"> 
+      <%= f.date_select :date %>
+    </div>  
+  </div> 
+
+  <div class="col-lg-10 col-lg-offset-2">
+    <%= link_to 'Cancel', movements_path, class: "btn btn-default " %> <%= f.submit "Save", class: "btn btn-primary"  %> 
+  </div>
+</fieldset>  
+<% end %>
+

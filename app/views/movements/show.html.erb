@@ -1,0 +1,31 @@
+<p>
+  <strong>Name:</strong>
+  <%= @movement.name %>
+</p>
+ 
+<p>
+  <strong>Category:</strong>
+  <%= @movement.category %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @movement.amount %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= if @movement.movementType
+  		"Dépense"
+  	else
+  		"Rentrée"
+  	end	 %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @movement.date %>
+</p>
+
+
+<%= link_to 'Back', movements_path, class: "btn btn-primary" %> 
