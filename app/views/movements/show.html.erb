@@ -24,8 +24,11 @@
 
 <p>
   <strong>Date:</strong>
-  <%= @movement.date %>
+  <%= @movement.date.strftime("%d/%m/%Y") %>
 </p>
 
 
-<%= link_to 'Back', movements_path, class: "btn btn-primary" %> 
+<%= link_to 'Back', movements_path, class: "btn btn-primary" %>
+<%= link_to 'Edit', edit_movement_path(@movement), class: "btn btn-primary" %>
+<%= link_to 'Supprimer', movement_path(@movement),
+                method: :delete, data: { confirm: 'Etes-vous sûr ?' } , class: "btn btn-primary"%>

@@ -2,9 +2,28 @@ class MovementsController < ApplicationController
 
   skip_before_filter :verify_authenticity_token
 
+  def index
+      @movements = Movement.find_all_by_date(params[:year], params[:month])
+      if (params[:year].nil?)
+        @selected_year = Time.now.strftime("%Y")
+      else
+        @selected_year = params[:year]
+      end  
+
+      if (params[:month].nil?)
+        @selected_month = Time.now.strftime("%m")
+      else
+        @selected_month = params[:month]
+      end   
+
+      @total = Movement.compute_total(@movements)
+      @cumulative_list = Movement.compute_cumulative_list(@movements)
+  end
+
+
 	def new
 		@movement = Movement.new
-    end
+  end
 
     def create
 	  @movement = Movement.new(movement_params)
@@ -25,25 +44,10 @@ class MovementsController < ApplicationController
 	end
 
 	def show
-	  puts Movement.find(params[:id])	
-  	  @movement = Movement.find(params[:id])
-        respond_to do |format|
-          format.json { render json: @movement }
-          format.xml { render xml: @movement }
-          format.html # show.html.erb
-        end
+    @movement = Movement.find(params[:id])
 	end
 
-	def index
-  	  @movements = Movement.all
-      
-      respond_to do |format|
-        format.json { render json: @movements }
-        format.xml { render xml: @movements }
-        format.html # index.html.erb
-      end
-	end
-
+	
 	def destroy
   	  @movement = Movement.find(params[:id])
 

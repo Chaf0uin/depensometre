@@ -1,38 +1,96 @@
-<h1>Listing movements</h1>
- 
-<table class="table table-hover table-responsive">
-  <tr>
-    <th>Name</th>
-    <th>Category</th>
-    <th>Type</th>
-    <th>Amount</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
- 
-  <% @movements.each do |movement| %>
-    <tr>
-      <td><%= movement.name %></td>
-      <td><%= movement.category %></td>
-      <td>
-        <%= if movement.movementType
-              "Dépense"
-            else
-              "Rentrée"
-            end  %>
-      </td>
-      <td><%= if movement.movementType
-              "-"
-            else
-              "+"
-            end  %> <%= movement.amount %> €</td>
-      <td><%= link_to 'Show', movement_path(movement) %></td>
-      <td><%= link_to 'Edit', edit_movement_path(movement) %></td>
-      <td><%= link_to 'Destroy', movement_path(movement),
-                    method: :delete, data: { confirm: 'Are you sure?' } %></td>
-    </tr>
-  <% end %>
-</table>
+<%= javascript_include_tag "app/assets/javascripts/highcharts.js", "chartkick" %>
 
-<%= link_to 'New movement', new_movement_path, class: "btn btn-primary " %> 
+
+<h1 class="col-lg-8"><%= Date::MONTHNAMES[@selected_month.to_i] + ' ' + @selected_year %> </h1>
+
+<div class="col-lg-4 box">
+  <div class="box-container">
+  <%= form_tag movements_path, :method => 'get' do %>
+      <%= select_tag :month, options_for_select(Movement.find_all_months,:selected=> @selected_month) %>
+      <%= select_tag :year, options_for_select(Movement.find_all_years,:selected=> @selected_year) %>
+      <%= submit_tag "Sélectionner", :name => nil, class: "btn btn-primary" %>
+  <% end %>
+  </div> 
+</div>
+
+
+<div class="col-lg-3 box">
+  <div id="recap" class="box-container">
+  <div class="recap_big"><%= @movements.size %></div>
+  <div class="recap_small">Mouvements</div>
+  <div class="recap_big"><%= @total %> €</div>
+  <div class="recap_small">Total</div>
+
+  <br />
+  <%= link_to 'Nouveau mouvement', new_movement_path, class: "btn btn-primary" %>
+  </div> 
+</div>
+
+ 
+<div  class="col-lg-9 box">
+  <div id="movements_container" class="box-container">
+  <table class="table table-hover table-responsive">
+    <tr>
+      <th>Nom</th>
+      <th>Catégorie</th>
+      <th>Montant</th>
+      <th>Date</th>
+    </tr>
+   
+    <% @movements.each do |movement| %>
+      <tr onclick="location.href='/movements/<%= movement.id %>'">
+        <td><%= movement.name %></td>
+        <td><%= movement.category %></td>
+        <td><%= if movement.movementType
+                "-"
+              else
+                "+"
+              end  %><%= movement.amount %> €</td>
+        <td><%= movement.date.strftime("%d/%m/%Y") %></td>
+      </tr>
+    <% end %>
+  </table>
+  </div> 
+</div>  
+
+<div class="box col-lg-4">
+  <div class="box-container">
+  Total rentrées/dépenses
+  <%= column_chart  [['Dépenses', @movements.movementType(true).sum(:amount)], ['Rentrées', @movements.movementType(false).sum(:amount)]] %>
+  </div> 
+</div>
+
+<div class="box col-lg-4">
+  <div class="box-container">
+  Dépenses
+  <%= pie_chart @movements.movementType(true).group(:name).sum(:amount) %>
+  </div> 
+</div>
+
+<div class="box col-lg-4">
+  <div class="box-container">
+  Rentrées
+  <%= pie_chart @movements.movementType(false).group(:name).sum(:amount) %>
+  </div> 
+</div>
+
+<div class="box col-lg-12">
+  <div class="box-container">
+  Répartition des dépenses
+  <%= column_chart @movements.movementType(true).group(:date).sum(:amount), stacked: true, :library => {:hAxis => {:format => "dd/mm/yyyy"}} %>
+  </div> 
+</div> 
+
+<div class="box col-lg-12">
+  <div class="box-container">
+  Répartition des rentrées
+  <%= column_chart @movements.movementType(false).group(:date).sum(:amount), stacked: true, :library => {:hAxis => {:format => "dd/mm/yyyy"}} %>
+  </div> 
+</div> 
+
+<div class="box col-lg-12">
+  <div class="box-container">
+  Evolution des mouvements
+  <%= line_chart @cumulative_list %>
+  </div> 
+</div> 
