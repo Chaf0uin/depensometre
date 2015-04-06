@@ -4,11 +4,10 @@ class Movement < ActiveRecord::Base
 	validates :amount, presence: true
 
 	scope :category, -> (category) { where category: category }
+	scope :user_id, -> (user) { where user_id: user }
 	scope :movementType, -> (movementType) { where movementType: movementType }
 	#scope :date, -> (year) { where('extract(year  from date) = ?', year) }
 	scope :date_year_month, -> (year, month) { where("strftime('%Y', date) = ? and strftime('%m', date) = ?", year, month) }
-
-	attr_accessor :signed_amount
 
 	filterrific(
 	    available_filters: [
@@ -17,11 +16,11 @@ class Movement < ActiveRecord::Base
 	)
 
 
-	def self.find_all_by_date(year, month)
+	def self.find_all_by_date(year, month, user)
 		if (year.nil? || month.nil?) 
-			Movement.date_year_month(Time.now.strftime("%Y"), Time.now.strftime("%m")).order(:date)
+			Movement.date_year_month(Time.now.strftime("%Y"), Time.now.strftime("%m")).user_id(user).order(:date)
 		else
-			Movement.date_year_month(year, month).order(:date)
+			Movement.date_year_month(year, month).user_id(user).order(:date)
 		end
 
 	end

@@ -1,9 +1,10 @@
 class MovementsController < ApplicationController
 
   skip_before_filter :verify_authenticity_token
+  before_action :authenticate_user!
 
   def index
-      @movements = Movement.find_all_by_date(params[:year], params[:month])
+      @movements = Movement.find_all_by_date(params[:year], params[:month], current_user.id)
       if (params[:year].nil?)
         @selected_year = Time.now.strftime("%Y")
       else
@@ -27,19 +28,13 @@ class MovementsController < ApplicationController
 
     def create
 	  @movement = Movement.new(movement_params)
+    @movement.user_id = current_user.id
 
-    respond_to do |format|
-      if @movement.save
-        format.html { redirect_to @movement }
-        format.json { render json: @movement, status: :created }
-        format.xml { render xml: @movement, status: :created }
-      else
-        format.html { render 'new' }
-        format.json { render json: @movement.errors, status: :unprocessable_entity }
-        format.xml { render xml: @movement.errors, status: :unprocessable_entity }
-      end
+    if @movement.save
+      redirect_to @movement
+    else
+      render 'new'
     end
-	 
 
 	end
 

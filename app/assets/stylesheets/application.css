@@ -53,3 +53,7 @@
  	height: 300px;
  	overflow: auto;
  }
+
+.custom-large-title{
+    font-size: 5em;
+}
