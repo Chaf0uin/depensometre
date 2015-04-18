@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150406141115) do
+ActiveRecord::Schema.define(version: 20150416101721) do
+
+  create_table "essences", force: true do |t|
+    t.decimal  "amount"
+    t.decimal  "quantity"
+    t.integer  "mileage"
+    t.datetime "date"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "movement_id"
+  end
 
   create_table "movements", force: true do |t|
     t.string   "name"

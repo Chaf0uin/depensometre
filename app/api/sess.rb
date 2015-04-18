@@ -29,7 +29,7 @@ class Sess < Grape::API
         #user.ensure_authentication_token!
         user.ensure_authentication_token
         user.save
-        {status: 'ok', token: user.authentication_token}.to_json
+        {status: 'ok', token: user.authentication_token}
         #{status: 'ok', token: 'TROLOLO'}.to_json
       end
     end

@@ -57,3 +57,38 @@
 .custom-large-title{
     font-size: 5em;
 }
+
+ .add_button {
+ 	width: 100%;
+  	margin-top: 41px;
+ }
+
+ .month_select {
+   width: 80px;
+   height: 34px;
+   overflow: hidden;
+   background: #ddd;
+   border: 1px solid #EDEDED;
+ }
+
+ .year_select {
+   width: 80px;
+   height: 34px;
+   overflow: hidden;
+   background: #ddd;
+   border: 1px solid #EDEDED;
+ }
+
+ .select_button {
+   width: 138px;
+ }
+
+.output {
+  color: #F73434;
+  font-weight: bold;
+}
+
+.input {
+  color: #abc837;
+  font-weight: bold;
+}

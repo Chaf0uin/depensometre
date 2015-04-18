@@ -5,6 +5,10 @@ class MovementsController < ApplicationController
 
   def index
       @movements = Movement.find_all_by_date(params[:year], params[:month], current_user.id)
+
+      @sorted_movements = @movements.order(date: :desc)
+      @reverse_sorted_movements = @movements.order(date: :asc)
+
       if (params[:year].nil?)
         @selected_year = Time.now.strftime("%Y")
       else
@@ -31,7 +35,7 @@ class MovementsController < ApplicationController
     @movement.user_id = current_user.id
 
     if @movement.save
-      redirect_to @movement
+      redirect_to movements_path
     else
       render 'new'
     end
@@ -44,9 +48,9 @@ class MovementsController < ApplicationController
 
 	
 	def destroy
-  	  @movement = Movement.find(params[:id])
+    @movement = Movement.find(params[:id])
 
-      respond_to do |format|
+    respond_to do |format|
       if @movement.destroy
         format.html { redirect_to movements_path }
         format.json { head :no_content, status: :ok }
@@ -65,14 +69,14 @@ class MovementsController < ApplicationController
 	end
 
 	def update
-  	  @movement = Movement.find(params[:id])
+    @movement = Movement.find(params[:id])
  
-  	  if @movement.update(movement_params)
+    if @movement.update(movement_params)
     	redirect_to @movement
-  	  else
-      	render 'edit'
-  	  end
+    else
+     	render 'edit'
     end
+  end 
 
 	private
   	  def movement_params

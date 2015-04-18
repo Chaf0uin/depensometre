@@ -1,7 +1,7 @@
 <%= form_for :movement, :html => {:class => "form-horizontal"} , url: movement_path(@movement), method: :patch do |f| %>
 
 <fieldset>
-  <legend>Editing movement</legend>
+  <legend>Editer mouvement</legend>
 
   <% if @movement.errors.any? %>
     <div id="error_explanation">
@@ -15,37 +15,37 @@
   <% end %>
 
   <div class="form-group">
-    <%= f.label :name, :class => "col-lg-2 control-label" %>
+    <%= f.label "Nom", :class => "col-lg-2 control-label" %>
     <div class="col-lg-10">
       <%= f.text_field :name, :class => "form-control" %>
     </div>  
   </div> 
 
   <div class="form-group">
-    <%= f.label :category, :class => "col-lg-2 control-label" %>
+    <%= f.label "Catégorie", :class => "col-lg-2 control-label" %>
     <div class="col-lg-10">
       <%= f.text_field :category, :class => "form-control" %>
     </div>  
   </div> 
 
   <div class="form-group">
-    <%= f.label :amount, :class => "col-lg-2 control-label" %>
+    <%= f.label "Montant", :class => "col-lg-2 control-label" %>
     <div class="col-lg-10"> 
       <%= f.number_field :amount, :class => "form-control text_field", :step => 'any' %>
     </div>  
   </div> 
 
   <div class="form-group">
-    <%= f.label :type, :class => "col-lg-2 control-label" %>
+    <%= f.label "Type", :class => "col-lg-2 control-label" %>
     <div class="col-lg-10"> 
       <div class="radio">
         <label>
-          <%= f.radio_button :movementType, "output" %>Dépense
+          <%= f.radio_button :movementType, "output", :checked => @movement.movementType %>Dépense
         </label>
       </div>
       <div class="radio"> 
         <label> 
-          <%= f.radio_button :movementType, "input" %>Rentrée
+          <%= f.radio_button :movementType, "input", :checked => !@movement.movementType %>Rentrée
         </label>
       </div>  
     </div>  
@@ -59,7 +59,8 @@
   </div> 
 
   <div class="col-lg-10 col-lg-offset-2">
-    <%= link_to 'Cancel', movements_path, class: "btn btn-default " %> <%= f.submit "Save", class: "btn btn-primary"  %> 
+    <%= link_to 'Annuler', movements_path, class: "btn btn-default " %> <%= link_to 'Supprimer', movement_path(@movement),
+                method: :delete, data: { confirm: 'Etes-vous sûr ?' } , class: "btn btn-primary"%> <%= f.submit "Enregistrer", class: "btn btn-primary"  %> 
   </div>
 </fieldset>  
 <% end %>

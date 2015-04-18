@@ -6,9 +6,9 @@
 <div class="col-lg-4 box">
   <div class="box-container">
   <%= form_tag movements_path, :method => 'get' do %>
-      <%= select_tag :month, options_for_select(Movement.find_all_months,:selected=> @selected_month) %>
-      <%= select_tag :year, options_for_select(Movement.find_all_years,:selected=> @selected_year) %>
-      <%= submit_tag "Sélectionner", :name => nil, class: "btn btn-primary" %>
+      <%= select_tag :month, options_for_select(Movement.find_all_months,:selected=> @selected_month), class: "month_select" %>
+      <%= select_tag :year, options_for_select(Movement.find_all_years,:selected=> @selected_year), class: "year_select" %>
+      <%= submit_tag "Sélectionner", :name => nil, class: "btn btn-primary select_button" %>
   <% end %>
   </div> 
 </div>
@@ -22,7 +22,7 @@
   <div class="recap_small">Total</div>
 
   <br />
-  <%= link_to 'Nouveau mouvement', new_movement_path, class: "btn btn-primary" %>
+  <%= link_to 'Nouveau mouvement', new_movement_path, class: "btn btn-primary add_button" %>
   </div> 
 </div>
 
@@ -31,22 +31,24 @@
   <div id="movements_container" class="box-container">
   <table class="table table-hover table-responsive">
     <tr>
+      <th>Date</th>
       <th>Nom</th>
       <th>Catégorie</th>
       <th>Montant</th>
-      <th>Date</th>
     </tr>
    
-    <% @movements.each do |movement| %>
-      <tr onclick="location.href='/movements/<%= movement.id %>'">
+    <% @sorted_movements.each do |movement| %>
+      <tr onclick="location.href='/movements/<%= movement.id %>/edit'" >
+        <td><%= movement.date.strftime("%d/%m/%Y") %></td>
         <td><%= movement.name %></td>
         <td><%= movement.category %></td>
-        <td><%= if movement.movementType
-                "-"
-              else
-                "+"
-              end  %><%= movement.amount %> €</td>
-        <td><%= movement.date.strftime("%d/%m/%Y") %></td>
+        <td class="<%= movement.movementType ? 'output' : 'input' %>">
+          <%= if movement.movementType
+            "-"
+          else
+            "+"
+          end  %><%= movement.amount %> €
+        </td>
       </tr>
     <% end %>
   </table>
@@ -77,20 +79,23 @@
 <div class="box col-lg-12">
   <div class="box-container">
   Répartition des dépenses
-  <%= column_chart @movements.movementType(true).group(:date).sum(:amount), stacked: true, :library => {:hAxis => {:format => "dd/mm/yyyy"}} %>
+  <br /><br />
+  <%= column_chart @reverse_sorted_movements.movementType(true).group(:date).sum(:amount), stacked: true, :library => {:hAxis => {:format => "dd/mm/yyyy"}} %>
   </div> 
 </div> 
 
 <div class="box col-lg-12">
   <div class="box-container">
   Répartition des rentrées
-  <%= column_chart @movements.movementType(false).group(:date).sum(:amount), stacked: true, :library => {:hAxis => {:format => "dd/mm/yyyy"}} %>
+  <br /><br />
+  <%= column_chart @reverse_sorted_movements.movementType(false).group(:date).sum(:amount), stacked: true, :library => {:hAxis => {:format => "dd/mm/yyyy"}} %>
   </div> 
 </div> 
 
 <div class="box col-lg-12">
   <div class="box-container">
   Evolution des mouvements
+  <br /><br />
   <%= line_chart @cumulative_list %>
   </div> 
 </div> 

@@ -4,7 +4,6 @@ class API < Grape::API
   version 'v1', using: :path
 
   API::routes
-  #mount Session::Data
   mount Sess
 
   rescue_from :all, backtrace: true
@@ -30,7 +29,7 @@ class API < Grape::API
     end
   end
 
-
-  #mount Movement::Data
   mount Mvnt
+  mount Name
+  mount Category
 end
