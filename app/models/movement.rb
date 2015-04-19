@@ -37,7 +37,18 @@ class Movement < ActiveRecord::Base
 		end
 
 		@years = @years.uniq
-	end	
+	end
+
+	def self.find_all_years_by_user(user_id)
+
+		@years = []
+
+		Movement.user_id(user_id).pluck(:date).each do | year |
+			@years << year.strftime("%Y")
+		end
+
+		@years = @years.uniq
+	end
 
 	def self.find_all_months
 		#Model.select("distinct(extract(month from date))")
@@ -50,7 +61,18 @@ class Movement < ActiveRecord::Base
 		end
 
 		@months = @months.uniq.sort_by(&:to_i)
-	end	
+	end
+
+	def self.find_all_months_by_user(user_id)
+
+		@months = []
+
+		Movement.user_id(user_id).pluck(:date).each do | month |
+			@months << month.strftime("%m")
+		end
+
+		@months = @months.uniq.sort_by(&:to_i)
+	end
 
 	def self.compute_total(movements)
 		@total = 0

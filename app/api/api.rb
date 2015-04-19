@@ -32,4 +32,6 @@ class API < Grape::API
   mount Mvnt
   mount Name
   mount Category
+  mount Month
+  mount Year
 end
